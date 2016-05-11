@@ -1,18 +1,18 @@
-#ifndef WATER_EFFECT_H
-#define WATER_EFFECT_H
+#ifndef BEAT_MODE_H
+#define BEAT_MODE_H
 
 /**************************************************************/
 /*                        DEFINE & TYPEDEF                    */
 /**************************************************************/
 
-typedef struct WandBWater_t
-{
-	uint16_t speed; 
-	uint16_t scale;
-	bool kMatrixSerpentineLayout;
-}WandBWater_s;
+#define U_SUB(a,b) 								((a>b) ? a-b : 0)	 
 
-#define BLANC_AND_WHITE_WATER_DELAY 10
+// TODO: Adjust value for NOISE / SENSITIVTY
+#define NOISE_VALUE											0x2A	
+
+// TODO: Customize for effect
+#define BRIGHTNESS_FACTOR									0x13	
+#define COLOR_FACTOR										0x0A	
 
 /**************************************************************/
 /*                        PUBLIC DATA                         */
@@ -21,18 +21,11 @@ typedef struct WandBWater_t
 /**************************************************************/
 /*                        PUBLIC FUNCTIONS                    */
 /**************************************************************/
-
-void SetupWaterEffect();
-void StopWaterEffect();
-void RunWaterEffect(uint8_t music);
-void RunWaterEffectWithColor(uint8_t color, uint8_t music);
+void RandomBeatMode(int *sound);
+void ColorBeatMode(int *sound);
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */
 /**************************************************************/
-static uint8_t defineNewSpeed(uint8_t music);
-static void fillnoise8();
-static void mapNoiseToLEDsUsingPalette();
-static uint16_t XY( uint8_t x, uint8_t y);
 
 #endif
