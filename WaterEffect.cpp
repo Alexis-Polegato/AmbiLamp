@@ -49,14 +49,15 @@ void RunWaterEffect(uint8_t newSpeed)
   FillNoise();
   MapNoiseToLed();
   FastLED.show();
-  if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
-  {
-    bandwInfo.speed += 2;
-  } 
-  else if( bandwInfo.speed > 3) 
-  {
-    bandwInfo.speed -= 2;
-  }  
+   bandwInfo.speed = 1;
+  // if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
+  // {
+  //   bandwInfo.speed += 1;
+  // } 
+  // else if( bandwInfo.speed > 3) 
+  // {
+  //   bandwInfo.speed -= 1;
+  // }  
 }
 
 void RunWaterEffectWithColor(uint8_t color, uint8_t music) 
@@ -74,11 +75,11 @@ void RunWaterEffectWithColor(uint8_t color, uint8_t music)
   newSpeed = music;
   if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
   {
-    bandwInfo.speed += 2;
+    bandwInfo.speed += 1;
   } 
   else if( bandwInfo.speed > 3) 
   {
-    bandwInfo.speed -= 2;
+    bandwInfo.speed -= 1;
   }  
 }
 

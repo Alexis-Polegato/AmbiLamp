@@ -14,7 +14,7 @@ void setup()
   InitSoundAnalysis();
   InitLeds();
   SwitchModeInit();
-  //SetupWaterEffect();
+  SetupWaterEffect();
   Serial.begin(57600);                                        // use the serial port
 }
 
@@ -25,37 +25,33 @@ void loop()
 
 	while(1)
 	{
-		EVERY_N_MILLISECONDS(50)
+		EVERY_N_MILLISECONDS(20)
 		{
 			//fhtsound();
 			//RunWaterEffect(3);
 			//SoundMeasureTable();
 			//ProcessSoundAnalysis();
 			//BackgroundMode(BACKGROUND_RED);
-			BeatMode();
+			
 			//VuMeter(SoundMeasure);
 			//RandomBeatMode(SoundMeasure);
 				
-			//SwitchModeTick();
-			/*
+			SwitchModeTick();
 			mode = getActualMode();
 			switch (mode) 
 	 			{
 	 			    case MODE_NORMAL:
-				      RunWaterEffect(3);
-	 			      Serial.println("NORMAL");
+	 			    RunWaterEffect(1);
+	 			    //BeatMode();
+	 			    //BackgroundMode(BACKGROUND_RED);
+				   //RandomBeatMode(SoundMeasure);
+				    //RandomBeatMode(SoundMeasure);
 	 			      break;
 	 			    case MODE_PARTY:
-	 			      //RunWaterEffect(sound*5);
-	 			      Serial.println("PARTY");
-	 			      break;
-	 			    case MODE_OFF:
-	 			      //StopWaterEffect();
-	 			      Serial.println("OFF");
-	 			      break;
+      				//RandomBeatMode(SoundMeasure);
+      				BeatMode();
+	 			    break;
 				}
-			*/
-			//ColorBeatMode(SoundMeasure);
 		}
 		PowerLeds();
 		//Serial.println("PING");
