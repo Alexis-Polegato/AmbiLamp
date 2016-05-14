@@ -26,8 +26,8 @@ LedInformation_s LedRunningInfo;
 void InitLeds()
 {
   LEDS.addLeds<LED_TYPE, LED_DT, COLOR_ORDER>(LedRunningInfo.leds, NUM_LEDS);
-  //FastLED.setBrightness(0xFF);
-  FastLED.setBrightness(128);
+  FastLED.setBrightness(0xFF);
+  //FastLED.setBrightness(128);
   // FastLED.setBrightness(BRIGHTNESS_HALF);
   set_max_power_in_volts_and_milliamps(5, 2500);  // TODO Ajust this value ??
   //FastLED.delay(1000);

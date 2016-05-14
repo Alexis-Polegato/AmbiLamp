@@ -13,6 +13,7 @@
 /**************************************************************/
 
 #define BEAT_SUB(a,b) 										((a>b) ? a-b : 0)
+#define U256_SUM(a,b) 										((a+b) > 128 ? a+b-128 : a+b)
 #define U_SUB(a,b) 											((a>b) ? a-b : 0)
 #define REMOVE_NOISE(sound,noise) 							((noise > sound) ? 0 : sound-noise)
 

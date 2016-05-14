@@ -83,7 +83,7 @@ void ProcessSoundAnalysis()
 {
   int i;
   cli();  
-  for (i = 0; i < FHT_N/2 ; i++)
+  for (i = 0; i < FHT_N; i++)
   {
     fht_input[i] = analogRead(0) - 512;
   } 
@@ -103,9 +103,9 @@ void BeatMode()
   ProcessSoundAnalysis();
   for(i = 0; i < NUM_LEDS; i++) 
   {                                     
-      beat = U_SUB(fht_log_out[2*i+2], NOISE_VALUE);        
+      beat = U_SUB(fht_log_out[i+2], NOISE_VALUE);        
       //if ((beat > 0) && (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b)))
-      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b + 3))
+      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
       {    
           LedRunningInfo.leds[i] = CHSV(beat * COLOR_FACTOR + color, 255, beat * BRIGHTNESS_FACTOR);
       }
