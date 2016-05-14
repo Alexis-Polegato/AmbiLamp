@@ -1,3 +1,4 @@
+#include "SoundAnalysis.h"
 #include "LedControl.h"
 #include "BeatMode.h"
 

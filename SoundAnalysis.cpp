@@ -1,7 +1,9 @@
 #include "Arduino.h"
+#include "LedControl.h"
+#include "BeatMode.h"
 #include "SoundAnalysis.h"
-
 #include <FHT.h>
+
 
 /**************************************************************/
 /*                        PUBLIC DATA                         */
@@ -16,6 +18,7 @@ static int SoundVolume[VOLUME_SAMPLES];
 static uint8_t volumeIndex;
 static uint16_t MinLevelAvg;                                              // For dynamic adjustment of graph low & high
 static uint16_t MaxLevelAvg;
+static uint8_t color;
 
 /**************************************************************/
 /*                        PUBLIC FUNCTIONS                    */
@@ -25,13 +28,7 @@ void InitSoundAnalysis()
 {
   // Because we power Sound Detector with 3.3 Volts
   analogReference(EXTERNAL);
-  // Init ADC (Pin A0 Used here)
-  //TIMSK0 = 0x00; 
-/*	ADCSRA = 0xE5; 
-	ADMUX  = 0x40; 
-	DIDR0  = 0x01; */
-	// TODO Add a "Debug Define to display data"
-	//Serial.begin(115200);
+
   SoundLevel = 12;
   MinLevelAvg = 0;
   MaxLevelAvg = 512;
@@ -82,8 +79,41 @@ int GetSoundLevel(uint16_t *minLvlAvg, uint16_t *maxLvlAvg)
   return (SoundLevel);
 }
 
+void ProcessSoundAnalysis()
+{
+  int i;
+  cli();  
+  for (i = 0; i < FHT_N/2 ; i++)
+  {
+    fht_input[i] = analogRead(0) - 512;
+  } 
+  sei();
+  fht_window(); 
+  fht_reorder(); 
+  fht_run();
+  fht_mag_log();
+}
 
-void ProcessSoundAnalysis(int *soundMeasure)
+void BeatMode()
+{
+  int index;
+  int i;
+  int beat;
+  color++;
+  ProcessSoundAnalysis();
+  for(i = 0; i < NUM_LEDS; i++) 
+  {                                     
+      beat = U_SUB(fht_log_out[2*i+2], NOISE_VALUE);        
+      //if ((beat > 0) && (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b)))
+      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b + 3))
+      {    
+          LedRunningInfo.leds[i] = CHSV(beat * COLOR_FACTOR + color, 255, beat * BRIGHTNESS_FACTOR);
+      }
+      LedRunningInfo.leds[i].nscale8(224);                                     
+  }
+}
+
+void ProcessSoundAnalysisTable(int *soundMeasure)
 {
   int i;
   cli();  
@@ -97,7 +127,7 @@ void ProcessSoundAnalysis(int *soundMeasure)
   fht_reorder(); 
   fht_run();
   fht_mag_log();
-  
+
   for(i = 0; i < FHT_SAMPLE_NUMBER; i++)
   {
     soundMeasure[i] = fht_log_out[i];
@@ -112,29 +142,12 @@ uint16_t MeanSoundAnalysis()
   SoundAcquisition();
   SoundProcessing();
   sei(); 
-  // TODO Add a "Debug Define to display data"
-  //SoundDisplay();
 
-  #if OCTAVE == 1
-  for(i = 0; i < FHT_OCTAVE_NUMBER; i++)
-  {
-    total += fht_oct_out[i];
-  }
-  total /= FHT_OCTAVE_NUMBER;
-  #endif
-
-  #if LOG_OUT == 1
   for(i = 0; i < FHT_HALF_SAMPLE_NUMBER; i++)
   {
     total += fht_log_out[i];
   }
   total = total / FHT_HALF_SAMPLE_NUMBER;
-/*  for(i = 0; i < FHT_HALF_SAMPLE_NUMBER; i++)
-  {
-    total += fht_log_out[2*i+2];
-  }
-  total = total / FHT_HALF_SAMPLE_NUMBER;*/
-  #endif
 
   return (total);
 }
@@ -158,19 +171,6 @@ static void SoundAcquisition()
  //    //measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
  //    fht_input[i] = measure; 
  //  }
-  
-  /* for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) { // save 256 samples
-      while(!(ADCSRA & 0x10)); // wait for adc to be ready
-      ADCSRA = 0xf5; // restart adc
-      byte m = ADCL; // fetch adc data
-      byte j = ADCH;
-      int k = (j << 8) | m; // form into an int
-      k -= 0x0200; // form into a signed int
-      k <<= 6; // form into a 16b signed int
-      //fht_input[i] = k; // put real data into bins
-      fht_input[i] = k; 
-    }*/
-
   //cli();
   for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
   {
@@ -185,42 +185,12 @@ static void SoundProcessing()
 	  fht_window(); 
     fht_reorder(); 
     fht_run();
-	  // TODO Select log or octave with define
-    #if OCTAVE == 1
-    fht_mag_octave();
-    #endif
-
-    #if LOG_OUT == 1
     fht_mag_log(); 
-    #endif
 }
 
 // To Read with processing
 static void SoundDisplay()
 {
 	Serial.write(255);
-  //Serial.write(fht_log_out, FHT_HALF_SAMPLE_NUMBER); 
-  //Serial.write(fht_oct_out, FHT_HALF_SAMPLE_NUMBER);
-
-  // #if OCTAVE == 1
-  // uint8_t i;
-  // for(i = 0; i < FHT_OCTAVE_NUMBER; i++)
-  // {
-  //   Serial.print("FHT ");
-  //   Serial.print(i);
-  //   Serial.print(" = ");
-  //   Serial.println(fht_oct_out[i]);
-  // }
-  // #endif
-
-  // #if LOG_OUT == 1
-  // uint8_t i;
-  // for(i = 0; i < FHT_SAMPLE_NUMBER; i++)
-  // {
-  //   Serial.print("FHT ");
-  //   Serial.print(i);
-  //   Serial.print(" = ");
-  //   Serial.println(fht_log_out[i]);
-  // }
-  // #endif
+  Serial.write(fht_log_out, FHT_HALF_SAMPLE_NUMBER); 
 }

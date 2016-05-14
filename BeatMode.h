@@ -5,7 +5,7 @@
 /*                        DEFINE & TYPEDEF                    */
 /**************************************************************/
 
-#define U_SUB(a,b) 											((a>b) ? a-b : 0)	 
+// #define U_SUB(a,b) 											((a>b) ? a-b : 0)	 
 #define U128_SUM(a,b) 										((a+b) > 128 ? a+b-128 : a+b)	 
 #define U150_SUM(a,b) 										((a+b) > 150 ? a+b-150 : a+b)	 
 #define U150_SUB(a,b) 										((a>b) ? a-b : 0)
