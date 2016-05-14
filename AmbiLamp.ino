@@ -7,15 +7,6 @@
 #include "BeatMode.h"
 #include "VuMeter.h"
 #include "SwitchMode.h"
-
-//#if OCTAVE == 1
-//int SoundMeasure[FHT_OCTAVE_NUMBER];
-//#endif
-
-//#if LOG_OUT == 1
-//int SoundMeasure[FHT_SAMPLE_NUMBER];
-//#endif
-
 // void SoundMeasureTable()
 // {
 // 	#if OCTAVE == 1
@@ -29,6 +20,8 @@
 // 	ProcessSoundAnalysis(SoundMeasure);
 // 	RandomBeatMode(SoundMeasure);
 // }
+
+
 
 void setup() 
 {
@@ -44,24 +37,20 @@ void setup()
 void loop() 
 {
 	uint8_t mode;
-	#if OCTAVE == 1
-	int SoundMeasure[FHT_OCTAVE_NUMBER];
-	#endif
-
-	#if LOG_OUT == 1
 	int SoundMeasure[FHT_SAMPLE_NUMBER];
-	#endif
 
 	while(1)
 	{
-	 Serial.println("PING");
+
 		EVERY_N_MILLISECONDS(20)
 		{
 			//SoundMeasureTable();
 			ProcessSoundAnalysis(SoundMeasure);
 			//VuMeter(SoundMeasure);
 			RandomBeatMode(SoundMeasure);
-			SwitchModeTick();
+				
+			//SwitchModeTick();
+			/*
 			mode = getActualMode();
 			switch (mode) 
 	 			{
@@ -78,16 +67,11 @@ void loop()
 	 			      Serial.println("OFF");
 	 			      break;
 				}
-
-			ColorBeatMode(SoundMeasure);
+			*/
+			//ColorBeatMode(SoundMeasure);
 		}
 		PowerLeds();
-		// EVERY_N_MILLISECONDS(50)
-		// {
-		// 	//VuMeterSimple();
-		// 	LoveMode();
-		// 	PowerLeds();
-		// }
+		Serial.println("PING");
 	}
 
 	// uint8_t cmt = 0;
@@ -145,12 +129,11 @@ void loop()
 	// 	}
 	// 	PowerLeds();
                              
-	// 	 	//ProcessSoundAnalysis(SoundMeasure);
-	// 		//RunWaterEffect(10);
+		 	//ProcessSoundAnalysis(SoundMeasure);
+			//RunWaterEffect(10);
 			
-	// 		//VuMeterLeds(SoundMeasure);
-	// 		// VuMeterLedsTest(color);
-	// }
+			//VuMeterLeds(SoundMeasure);
+			// VuMeterLedsTest(color);
 }  
 
 // void InitLeds()
