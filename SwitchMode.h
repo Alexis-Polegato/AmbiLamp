@@ -22,10 +22,10 @@
 #define SOUND_NORMAL_LEVEL		0x32
 #define SOUND_PARTY_LEVEL		0x64
 
-// #define HALF_SAMPLE_MAX_NUMBER	0x2EE
-// #define MIN_TOTAL_NUMBER		0x5DC
-#define HALF_SAMPLE_MAX_NUMBER	0x12C
-#define MIN_TOTAL_NUMBER		0x258
+#define HALF_SAMPLE_MAX_NUMBER	0x2EE
+#define MIN_TOTAL_NUMBER		0x5DC
+// #define HALF_SAMPLE_MAX_NUMBER	0x12C
+// #define MIN_TOTAL_NUMBER		0x258
 
 typedef struct switchInfo_t	
 {

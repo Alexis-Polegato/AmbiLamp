@@ -31,6 +31,7 @@ void SetupWaterEffect()
   	LedRunningInfo.currentPalette[8] = CRGB::White;
   	LedRunningInfo.currentPalette[12] = CRGB::White;
     FastLED.setBrightness(0xFF);
+    set_max_power_in_volts_and_milliamps(5, 2500);
 }
 
 void StopWaterEffect()
@@ -38,26 +39,25 @@ void StopWaterEffect()
   fill_solid(LedRunningInfo.currentPalette, 16, CRGB::Black);
 }
 
-void RunWaterEffect(uint8_t music) 
+void RunWaterEffect(uint8_t newSpeed) 
 {
-  uint8_t newSpeed;
-
   LedRunningInfo.currentPalette[0] = CRGB::White;
-    LedRunningInfo.currentPalette[4] = CRGB::White;
-    LedRunningInfo.currentPalette[8] = CRGB::White;
-    LedRunningInfo.currentPalette[12] = CRGB::White;
+  LedRunningInfo.currentPalette[4] = CRGB::White; 
+  LedRunningInfo.currentPalette[8] = CRGB::White;
+  LedRunningInfo.currentPalette[12] = CRGB::White;
 
-  fillnoise8();  // generate noise data
-  mapNoiseToLEDsUsingPalette(); // using the current palette
-  newSpeed = music;
-  if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
-  {
-    bandwInfo.speed += 2;
-  } 
-  else if( bandwInfo.speed > 3) 
-  {
-    bandwInfo.speed -= 2;
-  }  
+  FillNoise();
+  MapNoiseToLed();
+  FastLED.show();
+   bandwInfo.speed = 1;
+  // if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
+  // {
+  //   bandwInfo.speed += 1;
+  // } 
+  // else if( bandwInfo.speed > 3) 
+  // {
+  //   bandwInfo.speed -= 1;
+  // }  
 }
 
 void RunWaterEffectWithColor(uint8_t color, uint8_t music) 
@@ -69,17 +69,17 @@ void RunWaterEffectWithColor(uint8_t color, uint8_t music)
     LedRunningInfo.currentPalette[8] = CHSV(color, 255, 255);
     LedRunningInfo.currentPalette[12] = CHSV(color, 255, 255);
 
-  fillnoise8();  // generate noise data
-  mapNoiseToLEDsUsingPalette(); // using the current palette
+  FillNoise();  // generate noise data
+  MapNoiseToLed(); // using the current palette
   // newSpeed = defineNewSpeed(music);
   newSpeed = music;
   if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
   {
-    bandwInfo.speed += 2;
+    bandwInfo.speed += 1;
   } 
   else if( bandwInfo.speed > 3) 
   {
-    bandwInfo.speed -= 2;
+    bandwInfo.speed -= 1;
   }  
 }
 
@@ -113,7 +113,7 @@ static uint8_t defineNewSpeed(uint8_t music)
 /**************************************************************/
 /*                         PRIVATE FUNCTIONS                  */
 /**************************************************************/
-static void mapNoiseToLEDsUsingPalette()
+static void MapNoiseToLed()
 {
   static uint8_t ihue=0;
   
@@ -145,7 +145,7 @@ static void mapNoiseToLEDsUsingPalette()
   ihue+=1;
 }
 
-static void fillnoise8() 
+static void FillNoise() 
 {
   // If we're runing at a low "speed", some 8-bit artifacts become visible
   // from frame-to-frame.  In order to reduce this, we can do some fast data-smoothing.
@@ -173,7 +173,7 @@ static void fillnoise8()
       if( dataSmoothing ) 
       {
         uint8_t olddata = LedRunningInfo.noise[i][j];
-        uint8_t newdata = scale8( olddata, dataSmoothing) + scale8( data, 256 - dataSmoothing);
+        uint8_t newdata = scale8(olddata, dataSmoothing) + scale8(data, 256 - dataSmoothing);
         data = newdata;
       }
       
@@ -184,8 +184,8 @@ static void fillnoise8()
   LedRunningInfo.coordinate.z += bandwInfo.speed;
   
   // apply slow drift to X and Y, just for visual variation.
-  LedRunningInfo.coordinate.x += bandwInfo.speed / 8;
-  LedRunningInfo.coordinate.y -= bandwInfo.speed / 16;
+  LedRunningInfo.coordinate.x += bandwInfo.speed >> 3;
+  LedRunningInfo.coordinate.y -= bandwInfo.speed >> 4;
 }
 //
 // Mark's xy coordinate mapping code.  See the XYMatrix for more information on it.

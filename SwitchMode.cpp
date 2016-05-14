@@ -2,7 +2,7 @@
 * @Author: Alexis Lutun
 * @Date:   2016-05-14 13:32:38
 * @Last Modified by:   Alexis Lutun
-* @Last Modified time: 2016-05-14 23:07:52
+* @Last Modified time: 2016-05-14 23:37:47
 */
 
 #include "Arduino.h"
@@ -102,6 +102,7 @@ static void checkIfModeShouldSwitch()
 	else
 	{
 		Serial.println("QUIET");
+		SetupWaterEffect();
 		switchToNewMode(MODE_NORMAL);
 	}	
 }	
