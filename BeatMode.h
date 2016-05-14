@@ -10,11 +10,10 @@
 #define U150_SUM(a,b) 										((a+b) > 150 ? a+b-150 : a+b)	 
 #define U150_SUB(a,b) 										((a>b) ? a-b : 0)
 
-// TODO: Adjust value for NOISE / SENSITIVTY
-#define NOISE_VALUE											0x2A	
+	
 
 // TODO: Customize for effect
-#define BRIGHTNESS_FACTOR									0x16	
+#define BRIGHTNESS_FACTOR									0x0F	
 #define COLOR_FACTOR										0x0A	
 
 /**************************************************************/
@@ -26,7 +25,7 @@
 /**************************************************************/
 void RandomBeatMode(int *sound);
 void ColorBeatMode(int *sound);
-uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c);
+
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */

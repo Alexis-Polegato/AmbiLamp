@@ -13,7 +13,7 @@
 /**************************************************************/
 
 #define BEAT_SUB(a,b) 										((a>b) ? a-b : 0)
-#define U256_SUM(a,b) 										((a+b) > 128 ? a+b-128 : a+b)
+#define U128_SUM(a,b) 										((a+b) > 128 ? 64 : a+b)
 #define U_SUB(a,b) 											((a>b) ? a-b : 0)
 #define REMOVE_NOISE(sound,noise) 							((noise > sound) ? 0 : sound-noise)
 
@@ -23,6 +23,8 @@
 #define DC_OFFSET  											32 
 #define NOISE												0x64	
 
+// TODO: Adjust value for NOISE / SENSITIVTY
+#define NOISE_VALUE											0x2A
 #define VOLUME_SAMPLES										0x48	
 
 #define TOP 												17 
@@ -30,8 +32,8 @@
 
 #define FHT_N 256
 #define FHT_OCTAVE_NUMBER 									0x08 
-#define FHT_SAMPLE_NUMBER 									256 
-//#define FHT_SAMPLE_NUMBER 									128 
+//#define FHT_SAMPLE_NUMBER 									256 
+#define FHT_SAMPLE_NUMBER 									128 
 #define FHT_HALF_SAMPLE_NUMBER 								FHT_SAMPLE_NUMBER/2 
 
 #define MEAN_SOUND_THS										0x05
@@ -59,7 +61,9 @@ void GetFHT();
 void InitSoundAnalysis();
 int GetSoundLevel(uint16_t *minLvlAvg, uint16_t *maxLvlAvg);
 void ProcessSoundAnalysis();
+uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c);
 void BeatMode();
+void BeatModeWithColor();
 void ProcessSoundAnalysisTable(int *soundMeasure);
 uint16_t MeanSoundAnalysis();
 

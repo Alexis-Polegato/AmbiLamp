@@ -19,6 +19,7 @@ static uint8_t volumeIndex;
 static uint16_t MinLevelAvg;                                              // For dynamic adjustment of graph low & high
 static uint16_t MaxLevelAvg;
 static uint8_t color;
+static uint8_t randomIndex;
 
 /**************************************************************/
 /*                        PUBLIC FUNCTIONS                    */
@@ -83,15 +84,41 @@ void ProcessSoundAnalysis()
 {
   int i;
   cli();  
-  for (i = 0; i < FHT_N; i++)
+  for (i = 0; i < FHT_SAMPLE_NUMBER; i++)
   {
     fht_input[i] = analogRead(0) - 512;
   } 
-  sei();
   fht_window(); 
   fht_reorder(); 
   fht_run();
   fht_mag_log();
+  sei();
+}
+
+uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c)
+{
+    if(a > b)
+    {
+        if (a > c)
+        {
+            return(a);
+        }
+        else 
+        {
+            return(c);
+        }
+    }
+    else
+    {
+        if (b > c)
+        {
+            return(b);
+        }
+        else 
+        {
+            return(c);
+        }
+    }
 }
 
 void BeatMode()
@@ -99,17 +126,49 @@ void BeatMode()
   int index;
   int i;
   int beat;
+  int newColor;
+
   color++;
   ProcessSoundAnalysis();
-  for(i = 0; i < NUM_LEDS; i++) 
-  {                                     
-      beat = U_SUB(fht_log_out[i+2], NOISE_VALUE);        
-      //if ((beat > 0) && (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b)))
-      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
+  for(i = 0; i < NUM_LEDS/2; i++) 
+  {                              
+      beat = U_SUB(fht_log_out[i+4], NOISE_VALUE);        
+   
+      newColor = beat * COLOR_FACTOR + color;
+      //if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
+      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))  
       {    
-          LedRunningInfo.leds[i] = CHSV(beat * COLOR_FACTOR + color, 255, beat * BRIGHTNESS_FACTOR);
+          LedRunningInfo.leds[i] = CHSV(newColor, 255, beat * BRIGHTNESS_FACTOR);
+          LedRunningInfo.leds[i+NUM_LEDS_PER_FACE] = CHSV(newColor, 255, beat * BRIGHTNESS_FACTOR);
+          color++;
       }
       LedRunningInfo.leds[i].nscale8(224);                                     
+      LedRunningInfo.leds[i+NUM_LEDS_PER_FACE].nscale8(224);                                     
+  }
+}
+
+void BeatModeWithColor()
+{
+  int index;
+  int i;
+  int beat;
+  int newColor;
+
+  ProcessSoundAnalysis();
+  for(i = 0; i < NUM_LEDS/2; i++) 
+  {                           
+      beat = U_SUB(fht_log_out[i+4], NOISE_VALUE);        
+      //beat = U_SUB(fht_log_out[2*i+2], NOISE_VALUE);        
+      newColor = MaxColor(LedRunningInfo.leds[i].r, LedRunningInfo.leds[i].g, LedRunningInfo.leds[i].b);
+      //if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
+      if (beat > 2*(newColor))
+      {    
+          LedRunningInfo.leds[i] = CHSV(color, 255, beat * BRIGHTNESS_FACTOR);
+          LedRunningInfo.leds[i+NUM_LEDS_PER_FACE] = CHSV(color, 255, beat * BRIGHTNESS_FACTOR);
+          color++;
+      }
+      LedRunningInfo.leds[i].nscale8(224);                                     
+      LedRunningInfo.leds[i+NUM_LEDS_PER_FACE].nscale8(224);                                     
   }
 }
 

@@ -21,37 +21,39 @@ void setup()
 
 void loop() 
 {
+	//int SoundMeasure[FHT_N];
 	uint8_t mode;
 
 	while(1)
 	{
 		EVERY_N_MILLISECONDS(20)
 		{
+			BeatMode();
 			//fhtsound();
 			//RunWaterEffect(3);
-			//SoundMeasureTable();
-			//ProcessSoundAnalysis();
+			
+			//ProcessSoundAnalysisTable(SoundMeasure);
+			//ColorBeatMode(SoundMeasure);
 			//BackgroundMode(BACKGROUND_RED);
 			
 			//VuMeter(SoundMeasure);
-			//RandomBeatMode(SoundMeasure);
 				
-			SwitchModeTick();
-			mode = getActualMode();
-			switch (mode) 
-	 			{
-	 			    case MODE_NORMAL:
-	 			    RunWaterEffect(1);
-	 			    //BeatMode();
-	 			    //BackgroundMode(BACKGROUND_RED);
-				   //RandomBeatMode(SoundMeasure);
-				    //RandomBeatMode(SoundMeasure);
-	 			      break;
-	 			    case MODE_PARTY:
-      				//RandomBeatMode(SoundMeasure);
-      				BeatMode();
-	 			    break;
-				}
+			 //SwitchModeTick();
+			 //mode = getActualMode();
+			// switch (mode) 
+	 	// 		{
+	 	// 		    case MODE_NORMAL:
+	 	// 		    RunWaterEffect(1);
+	 	// 		    //BeatMode();
+	 	// 		    //BackgroundMode(BACKGROUND_RED);
+			// 	   //RandomBeatMode(SoundMeasure);
+			// 	    //RandomBeatMode(SoundMeasure);
+	 	// 		      break;
+	 	// 		    case MODE_PARTY:
+   //    				//RandomBeatMode(SoundMeasure);
+   //    				BeatMode();
+	 	// 		    break;
+			// 	}
 		}
 		PowerLeds();
 		//Serial.println("PING");
