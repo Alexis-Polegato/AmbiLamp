@@ -1,17 +1,20 @@
+#include "Arduino.h"
+
 #include "AmbiLamp.h"
 #include "SoundAnalysis.h"
 #include "LedControl.h"
 #include "WaterEffect.h"
 #include "BeatMode.h"
 #include "VuMeter.h"
+#include "SwitchMode.h"
 
-#if OCTAVE == 1
-int SoundMeasure[FHT_OCTAVE_NUMBER];
-#endif
+//#if OCTAVE == 1
+//int SoundMeasure[FHT_OCTAVE_NUMBER];
+//#endif
 
-#if LOG_OUT == 1
-int SoundMeasure[FHT_SAMPLE_NUMBER];
-#endif
+//#if LOG_OUT == 1
+//int SoundMeasure[FHT_SAMPLE_NUMBER];
+//#endif
 
 // void SoundMeasureTable()
 // {
@@ -32,6 +35,7 @@ void setup()
   //analogReference(EXTERNAL);                                  // Connect 3.3V to AREF pin for any microphones using 3.3V
   InitSoundAnalysis();
   InitLeds();
+  SwitchModeInit();
   //SetupWaterEffect();
   Serial.begin(57600);                                        // use the serial port
 }
@@ -39,16 +43,43 @@ void setup()
 
 void loop() 
 {
+	uint8_t mode;
+	#if OCTAVE == 1
+	int SoundMeasure[FHT_OCTAVE_NUMBER];
+	#endif
+
+	#if LOG_OUT == 1
+	int SoundMeasure[FHT_SAMPLE_NUMBER];
+	#endif
+
 	while(1)
 	{
+	 Serial.println("PING");
 		EVERY_N_MILLISECONDS(20)
 		{
-			Serial.println("Test");
 			//SoundMeasureTable();
 			ProcessSoundAnalysis(SoundMeasure);
-			VuMeter(SoundMeasure);
-			 //RandomBeatMode(SoundMeasure);
-			 //ColorBeatMode(SoundMeasure);
+			//VuMeter(SoundMeasure);
+			RandomBeatMode(SoundMeasure);
+			SwitchModeTick();
+			mode = getActualMode();
+			switch (mode) 
+	 			{
+	 			    case MODE_NORMAL:
+				      //RunWaterEffectWithColor(color, sound*10);
+	 			      Serial.println("NORMAL");
+	 			      break;
+	 			    case MODE_PARTY:
+	 			      //RunWaterEffect(sound*5);
+	 			      Serial.println("PARTY");
+	 			      break;
+	 			    case MODE_OFF:
+	 			      //StopWaterEffect();
+	 			      Serial.println("OFF");
+	 			      break;
+				}
+
+			ColorBeatMode(SoundMeasure);
 		}
 		PowerLeds();
 		// EVERY_N_MILLISECONDS(50)

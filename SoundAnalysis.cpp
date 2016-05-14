@@ -158,7 +158,7 @@ static void SoundAcquisition()
     adcHigh = ADCH;
     measure = (adcHigh << 8) | adcLow;
     measure -= DIFF_TO_BUILD_SIGNED_INT; 	
-    measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
+   // measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
     fht_input[i] = measure; 
   }
   
