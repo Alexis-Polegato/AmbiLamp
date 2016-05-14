@@ -47,9 +47,9 @@ void loop()
 		{
 			//SoundMeasureTable();
 			ProcessSoundAnalysis(&SoundMeasure[0]);
-			RandomBeatMode(&SoundMeasure[0]);
+			ColorBeatMode(SoundMeasure);
+			//RandomBeatMode(&SoundMeasure[0]);
 			//VuMeter(SoundMeasure);
-			 //ColorBeatMode(SoundMeasure);
 		}
 		PowerLeds();
 		// EVERY_N_MILLISECONDS(50)

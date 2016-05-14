@@ -26,6 +26,7 @@
 /**************************************************************/
 void RandomBeatMode(int *sound);
 void ColorBeatMode(int *sound);
+uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c);
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */
