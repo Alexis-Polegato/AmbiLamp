@@ -5,13 +5,13 @@
 #include "BeatMode.h"
 #include "VuMeter.h"
 
-#if OCTAVE == 1
-int SoundMeasure[FHT_OCTAVE_NUMBER];
-#endif
+// #if OCTAVE == 1
+// int SoundMeasure[FHT_OCTAVE_NUMBER];
+// #endif
 
-#if LOG_OUT == 1
-int SoundMeasure[FHT_SAMPLE_NUMBER];
-#endif
+// #if LOG_OUT == 1
+// int SoundMeasure[FHT_SAMPLE_NUMBER];
+// #endif
 
 // void SoundMeasureTable()
 // {
@@ -26,6 +26,8 @@ int SoundMeasure[FHT_SAMPLE_NUMBER];
 // 	ProcessSoundAnalysis(SoundMeasure);
 // 	RandomBeatMode(SoundMeasure);
 // }
+
+int SoundMeasure[FHT_SAMPLE_NUMBER];
 
 void setup() 
 {
@@ -43,11 +45,10 @@ void loop()
 	{
 		EVERY_N_MILLISECONDS(20)
 		{
-			Serial.println("Test");
 			//SoundMeasureTable();
-			ProcessSoundAnalysis(SoundMeasure);
-			VuMeter(SoundMeasure);
-			 //RandomBeatMode(SoundMeasure);
+			ProcessSoundAnalysis(&SoundMeasure[0]);
+			RandomBeatMode(&SoundMeasure[0]);
+			//VuMeter(SoundMeasure);
 			 //ColorBeatMode(SoundMeasure);
 		}
 		PowerLeds();
@@ -114,12 +115,11 @@ void loop()
 	// 	}
 	// 	PowerLeds();
                              
-	// 	 	//ProcessSoundAnalysis(SoundMeasure);
-	// 		//RunWaterEffect(10);
+		 	//ProcessSoundAnalysis(SoundMeasure);
+			//RunWaterEffect(10);
 			
-	// 		//VuMeterLeds(SoundMeasure);
-	// 		// VuMeterLedsTest(color);
-	// }
+			//VuMeterLeds(SoundMeasure);
+			// VuMeterLedsTest(color);
 }  
 
 // void InitLeds()

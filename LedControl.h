@@ -28,7 +28,8 @@
 #define BRIGHTNESS_MIN    		0x00
 #define BRIGHTNESS_BOOT   		BRIGHTNESS_MIN
 #define BRIGHTNESS_HALF       0x7F
-#define BRIGHTNESS_MAX    		0xFF
+#define BRIGHTNESS_MAX        0xFF
+#define BRIGHTNESS_DECREASE		0x30
 #define LED_TYPE    			WS2812B
 #define COLOR_ORDER 			GRB
 #define FRAMES_PER_SECOND  		60

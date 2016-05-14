@@ -27,9 +27,9 @@ void InitSoundAnalysis()
   analogReference(EXTERNAL);
   // Init ADC (Pin A0 Used here)
   //TIMSK0 = 0x00; 
-	ADCSRA = 0xE5; 
+/*	ADCSRA = 0xE5; 
 	ADMUX  = 0x40; 
-	DIDR0  = 0x01; 
+	DIDR0  = 0x01; */
 	// TODO Add a "Debug Define to display data"
 	//Serial.begin(115200);
   SoundLevel = 12;
@@ -85,36 +85,33 @@ int GetSoundLevel(uint16_t *minLvlAvg, uint16_t *maxLvlAvg)
 
 void ProcessSoundAnalysis(int *soundMeasure)
 {
-  uint8_t i;
+  int i;
   cli();  
-  SoundAcquisition();
-  SoundProcessing();
-  // TODO Add a "Debug Define to display data"
-  //SoundDisplay();
-  sei();
-
-  #if OCTAVE == 1
-  for(i = 0; i < FHT_OCTAVE_NUMBER; i++)
+  for (i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
   {
-    soundMeasure[i] = fht_oct_out[i];
-  }
-  #endif
-
-  #if LOG_OUT == 1
+    fht_input[i] = analogRead(0) - 512;
+  } 
+  sei();
+    // Apply FHT
+  fht_window(); 
+  fht_reorder(); 
+  fht_run();
+  fht_mag_log();
+  
   for(i = 0; i < FHT_SAMPLE_NUMBER; i++)
   {
     soundMeasure[i] = fht_log_out[i];
   }
-  #endif
 }
 
 uint16_t MeanSoundAnalysis()
 {
   uint8_t i;
   uint16_t total = 0;
-
+  cli();
   SoundAcquisition();
   SoundProcessing();
+  sei(); 
   // TODO Add a "Debug Define to display data"
   //SoundDisplay();
 
@@ -127,16 +124,16 @@ uint16_t MeanSoundAnalysis()
   #endif
 
   #if LOG_OUT == 1
-  // for(i = 0; i < FHT_HALF_SAMPLE_NUMBER; i++)
-  // {
-  //   total += fht_log_out[i];
-  // }
-  // total = total / FHT_HALF_SAMPLE_NUMBER;
   for(i = 0; i < FHT_HALF_SAMPLE_NUMBER; i++)
+  {
+    total += fht_log_out[i];
+  }
+  total = total / FHT_HALF_SAMPLE_NUMBER;
+/*  for(i = 0; i < FHT_HALF_SAMPLE_NUMBER; i++)
   {
     total += fht_log_out[2*i+2];
   }
-  total = total / FHT_HALF_SAMPLE_NUMBER;
+  total = total / FHT_HALF_SAMPLE_NUMBER;*/
   #endif
 
   return (total);
@@ -148,19 +145,19 @@ uint16_t MeanSoundAnalysis()
 
 static void SoundAcquisition()
 {
-  uint8_t adcLow, adcHigh;
-	int measure;
-	for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) 
-  { 
-    while(!(ADCSRA & 0x10));      // Waiting for ADC Ready
-    ADCSRA = 0xF5;
-    adcLow = ADCL; 
-    adcHigh = ADCH;
-    measure = (adcHigh << 8) | adcLow;
-    measure -= DIFF_TO_BUILD_SIGNED_INT; 	
-    measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
-    fht_input[i] = measure; 
-  }
+ //  uint8_t adcLow, adcHigh;
+	// int measure;
+	// for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) 
+ //  { 
+ //    while(!(ADCSRA & 0x10));      // Waiting for ADC Ready
+ //    ADCSRA = 0xF5;
+ //    adcLow = ADCL; 
+ //    adcHigh = ADCH;
+ //    measure = (adcHigh << 8) | adcLow;
+ //    measure -= DIFF_TO_BUILD_SIGNED_INT; 	
+ //    //measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
+ //    fht_input[i] = measure; 
+ //  }
   
   /* for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) { // save 256 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
@@ -175,10 +172,10 @@ static void SoundAcquisition()
     }*/
 
   //cli();
-/*  for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
+  for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
   {
       fht_input[i] = analogRead(0) - 512;
-  }  */
+  }  
   //sei();
 }
 
