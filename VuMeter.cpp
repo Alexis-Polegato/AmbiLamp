@@ -239,15 +239,15 @@ void VuMeter(int *soundMeasure)
     Serial.print("Sound Mesure ");
     Serial.print(i);
     Serial.print(" = ");
-    Serial.println(soundMeasure[i]);
+    //Serial.println(soundMeasure[i]);
   }
-  Serial.println();
+  //Serial.println();
   for(i = 0; i < WIDTH_PER_FACE; i++)
   {
     Serial.print("Top de");
     Serial.print(i);
     Serial.print(" = ");
-    Serial.println(top[i]);
+    //Serial.println(top[i]);
   }
   #endif
 
@@ -305,15 +305,15 @@ void VuMeterLedsTest(int value)
     Serial.print("Sound Mesure ");
     Serial.print(i);
     Serial.print(" = ");
-    Serial.println(soundMeasure[i]);
+    //Serial.println(soundMeasure[i]);
   }
-  Serial.println();
+  //Serial.println();
   for(i = 0; i < WIDTH_PER_FACE; i++)
   {
     Serial.print("Top de");
     Serial.print(i);
     Serial.print(" = ");
-    Serial.println(top[i]);
+    //Serial.println(top[i]);
   }*/
   for(i = 0; i < HEIGHT; i++)
   {

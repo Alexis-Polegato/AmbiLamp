@@ -209,7 +209,7 @@ static void SoundDisplay()
   //   Serial.print("FHT ");
   //   Serial.print(i);
   //   Serial.print(" = ");
-  //   Serial.println(fht_oct_out[i]);
+  //   //Serial.println(fht_oct_out[i]);
   // }
   // #endif
 
@@ -220,7 +220,7 @@ static void SoundDisplay()
   //   Serial.print("FHT ");
   //   Serial.print(i);
   //   Serial.print(" = ");
-  //   Serial.println(fht_log_out[i]);
+  //   //Serial.println(fht_log_out[i]);
   // }
   // #endif
 }

@@ -29,7 +29,7 @@ void setup()
   InitSoundAnalysis();
   InitLeds();
   SwitchModeInit();
-  //SetupWaterEffect();
+  SetupWaterEffect();
   Serial.begin(57600);                                        // use the serial port
 }
 
@@ -41,37 +41,27 @@ void loop()
 
 	while(1)
 	{
-
-		EVERY_N_MILLISECONDS(20)
-		{
+	//	EVERY_N_MILLISECONDS(50)
+	//	{
 			//SoundMeasureTable();
 			ProcessSoundAnalysis(SoundMeasure);
-			//VuMeter(SoundMeasure);
-			RandomBeatMode(SoundMeasure);
+			//
+			
 				
-			//SwitchModeTick();
-			/*
-			mode = getActualMode();
+			SwitchModeTick();
+			//mode = getActualMode();
 			switch (mode) 
 	 			{
 	 			    case MODE_NORMAL:
-				      //RunWaterEffectWithColor(color, sound*10);
-	 			      Serial.println("NORMAL");
+				   RandomBeatMode(SoundMeasure);
+				    //RandomBeatMode(SoundMeasure);
 	 			      break;
 	 			    case MODE_PARTY:
-	 			      //RunWaterEffect(sound*5);
-	 			      Serial.println("PARTY");
-	 			      break;
-	 			    case MODE_OFF:
-	 			      //StopWaterEffect();
-	 			      Serial.println("OFF");
-	 			      break;
+      				RandomBeatMode(SoundMeasure);
+	 			    break;
 				}
-			*/
-			//ColorBeatMode(SoundMeasure);
-		}
+	//	}
 		PowerLeds();
-		Serial.println("PING");
 	}
 
 	// uint8_t cmt = 0;
@@ -112,15 +102,15 @@ void loop()
 	// 			{
 	// 			    case STATE_MUSIC_ON:
 	// 			      RunWaterEffectWithColor(color, sound*10);
-	// 			      //Serial.println("State Music ON");
+	// 			      ////Serial.println("State Music ON");
 	// 			      break;
 	// 			    case STATE_MUSIC_OFF:
 	// 			      RunWaterEffect(sound*5);
-	// 			      //Serial.println("State Music OFF");
+	// 			      ////Serial.println("State Music OFF");
 	// 			      break;
 	// 			    case STATE_MUSIC_PAUSE:
 	// 			      StopWaterEffect();
-	// 			      //Serial.println("State Music Pause");
+	// 			      ////Serial.println("State Music Pause");
 	// 			      break;
 	// 			    default:
 	// 			      // do something
@@ -190,15 +180,15 @@ void loop()
 // void loop() 
 // {
 // 	tick = 0;
-// 	Serial.println("Debut Test");
+// 	//Serial.println("Debut Test");
 // 	testValue = 0;
-// 	Serial.println(testValue);
+// 	//Serial.println(testValue);
 // 	uint8_t i = 0;
 //   	while(1)
 //   	{
 //   		if(tick == 1)
 //   		{
-//   			Serial.println(testValue);
+//   			//Serial.println(testValue);
 //   			VuMeterLedsTest(testValue);
 // 		    tick = 0;
 //   		}
