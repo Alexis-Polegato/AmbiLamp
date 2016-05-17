@@ -15,6 +15,7 @@ WandBWater_s bandwInfo;
 /**************************************************************/
 /*                         PUBLIC FUNCTIONS                   */
 /**************************************************************/
+
 void SetupWaterEffect()
 {
   	bandwInfo.speed = 50; // speed is set dynamically once we've started up
@@ -39,7 +40,7 @@ void StopWaterEffect()
   fill_solid(LedRunningInfo.currentPalette, 16, CRGB::Black);
 }
 
-void RunWaterEffect(uint8_t newSpeed) 
+void RunWaterEffect() 
 {
   LedRunningInfo.currentPalette[0] = CRGB::White;
   LedRunningInfo.currentPalette[4] = CRGB::White; 
@@ -49,38 +50,22 @@ void RunWaterEffect(uint8_t newSpeed)
   FillNoise();
   MapNoiseToLed();
   FastLED.show();
-   bandwInfo.speed = 1;
-  // if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
-  // {
-  //   bandwInfo.speed += 1;
-  // } 
-  // else if( bandwInfo.speed > 3) 
-  // {
-  //   bandwInfo.speed -= 1;
-  // }  
+  bandwInfo.speed = 1; 
 }
 
-void RunWaterEffectWithColor(uint8_t color, uint8_t music) 
+void RunWaterEffectWithColor(uint8_t color) 
 {
   uint8_t newSpeed;
 
-    LedRunningInfo.currentPalette[0] = CHSV(color, 255, 255);
-    LedRunningInfo.currentPalette[4] = CHSV(color, 255, 255);
-    LedRunningInfo.currentPalette[8] = CHSV(color, 255, 255);
-    LedRunningInfo.currentPalette[12] = CHSV(color, 255, 255);
+  LedRunningInfo.currentPalette[0] = CHSV(color, 255, 255);
+  LedRunningInfo.currentPalette[4] = CHSV(color, 255, 255);
+  LedRunningInfo.currentPalette[8] = CHSV(color, 255, 255);
+  LedRunningInfo.currentPalette[12] = CHSV(color, 255, 255);
 
   FillNoise();  // generate noise data
   MapNoiseToLed(); // using the current palette
-  // newSpeed = defineNewSpeed(music);
-  newSpeed = music;
-  if (newSpeed > bandwInfo.speed && bandwInfo.speed < 250)
-  {
-    bandwInfo.speed += 1;
-  } 
-  else if( bandwInfo.speed > 3) 
-  {
-    bandwInfo.speed -= 1;
-  }  
+  FastLED.show();
+  bandwInfo.speed = 1; 
 }
 
 static uint8_t defineNewSpeed(uint8_t music)
@@ -89,27 +74,9 @@ static uint8_t defineNewSpeed(uint8_t music)
 
   result = music * 5 - 13;
 
-  return result;
-
-/*  uint8_t result;
-
-  if (music == 0x01)
-  {
-    result = 1;
-  }
-  else if (music == 0x02)
-  {
-    result = 50;
-  }
-  else if (music == 0x03)
-  {
-    result = 100;
-  }
-  else if (music == 0x04)
-  {
-    result = 255;
-  } */    
+  return result;   
 }
+
 /**************************************************************/
 /*                         PRIVATE FUNCTIONS                  */
 /**************************************************************/

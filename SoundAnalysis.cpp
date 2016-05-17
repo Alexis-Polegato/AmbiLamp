@@ -86,7 +86,7 @@ void ProcessSoundAnalysis()
   cli();  
   for (i = 0; i < FHT_SAMPLE_NUMBER; i++)
   {
-    fht_input[i] = analogRead(0) - 512;
+    fht_input[i] = analogRead(SOUND_SENSOR_PIN) - 512;
   } 
   fht_window(); 
   fht_reorder(); 

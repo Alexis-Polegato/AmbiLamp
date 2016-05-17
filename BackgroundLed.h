@@ -23,6 +23,7 @@
 /**************************************************************/
 
 void BackgroundMode(uint8_t color);
+void BackgroundModePerFace(uint8_t firstColor, uint8_t secondColor);
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */

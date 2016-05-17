@@ -12,10 +12,12 @@
 /*                        DEFINE & TYPEDEF                    */
 /**************************************************************/
 
+#define U_SUB(a,b) 											((a>b) ? a-b : 0)
 #define BEAT_SUB(a,b) 										((a>b) ? a-b : 0)
 #define U128_SUM(a,b) 										((a+b) > 128 ? 64 : a+b)
-#define U_SUB(a,b) 											((a>b) ? a-b : 0)
 #define REMOVE_NOISE(sound,noise) 							((noise > sound) ? 0 : sound-noise)
+
+#define SOUND_SENSOR_PIN									0
 
 #define DIFF_TO_BUILD_SIGNED_INT							0x200
 #define FACTOR_TO_BUILD_SIGNED_SHORT						0x06
@@ -30,7 +32,7 @@
 #define TOP 												17 
 //#define TOP 										(HEIGHT + 2)  
 
-#define FHT_N 256
+
 #define FHT_OCTAVE_NUMBER 									0x08 
 //#define FHT_SAMPLE_NUMBER 									256 
 #define FHT_SAMPLE_NUMBER 									128 

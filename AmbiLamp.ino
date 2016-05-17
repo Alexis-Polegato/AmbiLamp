@@ -21,7 +21,7 @@ void setup()
 
 void loop() 
 {
-	//int SoundMeasure[FHT_N];
+	int SoundMeasure[FHT_SAMPLE_NUMBER];
 	uint8_t mode;
 
 	while(1)
@@ -29,7 +29,6 @@ void loop()
 		EVERY_N_MILLISECONDS(20)
 		{
 			BeatMode();
-			//fhtsound();
 			//RunWaterEffect(3);
 			
 			//ProcessSoundAnalysisTable(SoundMeasure);
@@ -56,6 +55,5 @@ void loop()
 			// 	}
 		}
 		PowerLeds();
-		//Serial.println("PING");
 	}
 }
