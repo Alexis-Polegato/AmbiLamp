@@ -29,30 +29,20 @@ void loop()
 		EVERY_N_MILLISECONDS(20)
 		{
 			BeatMode();
-			//RunWaterEffect(3);
-			
-			//ProcessSoundAnalysisTable(SoundMeasure);
-			//ColorBeatMode(SoundMeasure);
 			//BackgroundMode(BACKGROUND_RED);
-			
-			//VuMeter(SoundMeasure);
+			//VuMeterSimple();
 				
-			 //SwitchModeTick();
-			 //mode = getActualMode();
-			// switch (mode) 
-	 	// 		{
-	 	// 		    case MODE_NORMAL:
-	 	// 		    RunWaterEffect(1);
-	 	// 		    //BeatMode();
-	 	// 		    //BackgroundMode(BACKGROUND_RED);
-			// 	   //RandomBeatMode(SoundMeasure);
-			// 	    //RandomBeatMode(SoundMeasure);
-	 	// 		      break;
-	 	// 		    case MODE_PARTY:
-   //    				//RandomBeatMode(SoundMeasure);
-   //    				BeatMode();
-	 	// 		    break;
-			// 	}
+			 SwitchModeTick();
+			 mode = getActualMode();
+			 switch (mode) 
+	 	 		{
+	 	 		    case MODE_NORMAL:
+	 	 		    	RunWaterEffect(1);
+	 	 		    break;
+	 	 		    case MODE_PARTY:
+       					BeatMode();
+	 	 		    break;
+			 	}
 		}
 		PowerLeds();
 	}

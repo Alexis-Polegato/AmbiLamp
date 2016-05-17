@@ -2,7 +2,7 @@
 * @Author: Alexis Lutun
 * @Date:   2016-05-14 13:32:38
 * @Last Modified by:   Alexis Lutun
-* @Last Modified time: 2016-05-14 23:37:47
+* @Last Modified time: 2016-05-14 23:52:21
 */
 
 #include "Arduino.h"
@@ -81,7 +81,7 @@ static void switchToNewMode(char newMode)
 	{
 		if (newMode == MODE_NORMAL)
 		{
-			//SetupWaterEffect();
+			SetupWaterEffect();
 		}				
 		else if (newMode == MODE_PARTY)
 		{				
