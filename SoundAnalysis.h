@@ -19,6 +19,8 @@
 
 #define SOUND_SENSOR_PIN									0
 
+#define SOUND_SENSOR_ANALOG_OFFSET							0x200									
+
 #define DIFF_TO_BUILD_SIGNED_INT							0x200
 #define FACTOR_TO_BUILD_SIGNED_SHORT						0x06
 
@@ -63,9 +65,6 @@ void GetFHT();
 void InitSoundAnalysis();
 int GetSoundLevel(uint16_t *minLvlAvg, uint16_t *maxLvlAvg);
 void ProcessSoundAnalysis();
-uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c);
-void BeatMode();
-void BeatModeWithColor();
 void ProcessSoundAnalysisTable(int *soundMeasure);
 uint16_t MeanSoundAnalysis();
 

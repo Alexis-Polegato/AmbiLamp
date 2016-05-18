@@ -12,6 +12,7 @@
 
 // TODO: Adjust value for NOISE / SENSITIVTY
 #define BEAT_MODE_NOISE_VALUE								0x2A	
+#define BEAT_MODE_FREQUENCY_OFFSET							0x07	
 
 // TODO: Customize for effect
 #define BRIGHTNESS_FACTOR									0x0F	
@@ -24,12 +25,13 @@
 /**************************************************************/
 /*                        PUBLIC FUNCTIONS                    */
 /**************************************************************/
+
 void RandomBeatMode(int *sound);
 void ColorBeatMode(int *sound);
-
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */
 /**************************************************************/
+static uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c);
 
 #endif

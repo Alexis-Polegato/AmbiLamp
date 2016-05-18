@@ -10,12 +10,14 @@
 
 void setup() 
 {
-  //analogReference(EXTERNAL);                                  // Connect 3.3V to AREF pin for any microphones using 3.3V
   InitSoundAnalysis();
   InitLeds();
+  InitVuMeter();
   SwitchModeInit();
   SetupWaterEffect();
-  Serial.begin(57600);                                        // use the serial port
+  #if DEBUG == 1
+  Serial.begin(57600);
+  #endif
 }
 
 
@@ -28,21 +30,27 @@ void loop()
 	{
 		EVERY_N_MILLISECONDS(20)
 		{
-			BeatMode();
-			//BackgroundMode(BACKGROUND_RED);
-			//VuMeterSimple();
-				
-			 SwitchModeTick();
-			 mode = getActualMode();
-			 switch (mode) 
-	 	 		{
-	 	 		    case MODE_NORMAL:
-	 	 		    	RunWaterEffect(1);
-	 	 		    break;
-	 	 		    case MODE_PARTY:
-       					BeatMode();
-	 	 		    break;
-			 	}
+			SwitchModeTick();
+			mode = getActualMode();
+			switch (mode) 
+ 	 		{
+ 	 		    case MODE_NORMAL:
+ 	 		    	RunWaterEffect();
+
+ 	 		    	/* Others Modes */
+ 	 		    	//RunWaterEffectWithColor(LED_COLOR_CSV_PINK);
+ 	 		    	//BackgroundMode(BACKGROUND_RED);
+ 	 		    break;
+ 	 		    
+ 	 		    case MODE_PARTY:
+ 	 		     	ProcessSoundAnalysisTable(SoundMeasure);
+					RandomBeatMode(SoundMeasure);		
+					
+					/* Others Modes */
+					//ColorBeatMode(SoundMeasure);		
+					//VuMeterSound();
+ 	 		    break;
+		 	}
 		}
 		PowerLeds();
 	}

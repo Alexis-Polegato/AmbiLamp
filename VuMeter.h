@@ -16,9 +16,10 @@
 /*                        PUBLIC FUNCTIONS                    */
 /**************************************************************/
 
-void VuMeterSimple();
-void LoveMode();
-void VuMeter(int *soundMeasure);
+void InitVuMeter();
+void VuMeterSound();
+void TryToReachTheTop();
+void VuMeterFrequency(int *soundMeasure);
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */

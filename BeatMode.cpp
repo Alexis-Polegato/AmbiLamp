@@ -27,9 +27,9 @@ void RandomBeatMode(int *sound)
     uint8_t newBrightness;
 
 	Color++;
-	for(i= 0; i < NUM_LEDS_PER_FACE; i++) 
+	for( i= 0; i < NUM_LEDS_PER_FACE; i++) 
 	{                               
-     	beat = U_SUB(sound[i+7], BEAT_MODE_NOISE_VALUE);    // Removing Noise, but keep > 0     
+     	beat = U_SUB(sound[i+BEAT_MODE_FREQUENCY_OFFSET], BEAT_MODE_NOISE_VALUE);    // Removing Noise, but keep > 0     
 
         if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))           // Refresh an LED only when the intensity is low
     	{    
@@ -51,9 +51,9 @@ void ColorBeatMode(int *sound)
     uint8_t newBrightness;
 
 	Color++;
-	for(i= 0; i < NUM_LEDS_PER_FACE; i++) 
+	for( i= 0; i < NUM_LEDS_PER_FACE; i++) 
 	{                                    
-     	beat = U_SUB(sound[i+7], BEAT_MODE_NOISE_VALUE);
+     	beat = U_SUB(sound[i+BEAT_MODE_FREQUENCY_OFFSET], BEAT_MODE_NOISE_VALUE);
         currentColor = MaxColor(LedRunningInfo.leds[i].r, LedRunningInfo.leds[i].g, LedRunningInfo.leds[i].b);
     	if (beat > 3 * currentColor)  
     	{    
@@ -70,3 +70,29 @@ void ColorBeatMode(int *sound)
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */
 /**************************************************************/
+
+static uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c)
+{
+    if(a > b)
+    {
+        if (a > c)
+        {
+            return(a);
+        }
+        else 
+        {
+            return(c);
+        }
+    }
+    else
+    {
+        if (b > c)
+        {
+            return(b);
+        }
+        else 
+        {
+            return(c);
+        }
+    }
+}

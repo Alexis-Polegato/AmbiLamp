@@ -37,6 +37,15 @@
 
 #define SATURATION_MAX                                       0xFF
 
+#define LED_COLOR_CSV_RED                                    0x00
+#define LED_COLOR_CSV_ORANGE                                 0x20
+#define LED_COLOR_CSV_YELLOW                                 0x40
+#define LED_COLOR_CSV_GREEN                                  0x80
+#define LED_COLOR_CSV_CYAN                                   0xA0
+#define LED_COLOR_CSV_BLUE                                   0xC0
+#define LED_COLOR_CSV_PINK                                   0xF0
+#define LED_COLOR_CSV_LIGHT_PINK                             0xC8
+#define LED_COLOR_CSV_DARK_PINK                              0xFF
 
 #define MAX_DIMENSION                                        ((WIDTH>HEIGHT) ? WIDTH : HEIGHT)
 

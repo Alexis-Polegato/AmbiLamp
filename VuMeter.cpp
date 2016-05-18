@@ -19,87 +19,13 @@ uint8_t DotCount;
 /*                        PUBLIC FUNCTIONS                    */
 /**************************************************************/
 
-void VuMeterSimple()
+void InitVuMeter()
 {
-	int soundLevel;
-	int height;
-	uint8_t i;
-	uint16_t minLvl;
-	uint16_t maxLvl;
-
-	soundLevel = GetSoundLevel(&minLvl, &maxLvl);
-
-	height = TOP * (soundLevel - minLvl) / (long)(maxLvl - minLvl);
-
-	if (height < 0L)
-	{
-	    height = 0;
-  	}
-  	else if (height > TOP)
-  	{
-  		height = TOP;
-  	}
-  	if (height > Peak)
-  	{
-  		Peak = height;
-  	}
-
-  	for (i=0; i<HEIGHT; i++) 
-  	{
-	    if (i >= height)   
-	    {
-	      LedRunningInfo.leds[i + 0*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 2*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 4*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 6*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 8*HEIGHT].setRGB(0, 0, 0);
-	    }
-	    else
-	    {
-	      LedRunningInfo.leds[i + 0*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 2*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 4*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 6*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 8*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	    }
-	}
-
-  
-
-	for(i=HEIGHT; i>0; i--)
-	{
-	    if ((HEIGHT - i) >= height)   
-	    {
-	      LedRunningInfo.leds[i + 1*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 3*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 5*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 7*HEIGHT].setRGB(0, 0, 0);
-	      LedRunningInfo.leds[i + 9*HEIGHT].setRGB(0, 0, 0);
-	    }
-	    else
-	    {
-	      LedRunningInfo.leds[i + 1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	      LedRunningInfo.leds[i + 9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-	    }
-	}
-
-	if ((Peak > 3) && (Peak <= HEIGHT-1))
-	{
-		// One side
-		LedRunningInfo.leds[Peak - 1] 				= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-		LedRunningInfo.leds[Peak + 2*HEIGHT] 		= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-		LedRunningInfo.leds[Peak - 1 +4*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-		// Other side
-	  	LedRunningInfo.leds[Peak - 1 + 5*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-	  	LedRunningInfo.leds[Peak + 7*HEIGHT] 		= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-	  	LedRunningInfo.leds[Peak - 1 + 9*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 30, 150), 255, 255);
-	}
+	Peak 	 = 0x00;
+	DotCount = 0x00;
 }
 
-void LoveMode()
+void VuMeterSound()
 {
 	int soundLevel;
 	int height;
@@ -136,15 +62,13 @@ void LoveMode()
 	    }
 	    else
 	    {
-	      LedRunningInfo.leds[i + 0*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 2*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 4*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 6*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 8*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, 255, 200), 255, 255);
+	      LedRunningInfo.leds[i + 0*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 2*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 4*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 6*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 8*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 	    }
 	}
-
-  
 
 	for(i=HEIGHT; i>0; i--)
 	{
@@ -158,24 +82,23 @@ void LoveMode()
 	    }
 	    else
 	    {
-	      LedRunningInfo.leds[i + 1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 255, 200), 255, 255);
-	      LedRunningInfo.leds[i + 9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 255, 200), 255, 255);
+	      LedRunningInfo.leds[i + 1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+		  LedRunningInfo.leds[i + 9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 	    }
 	}
 
 	if ((Peak > 3) && (Peak <= HEIGHT-1))
 	{
 		// One side
-		LedRunningInfo.leds[Peak - 1] 				= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
-		LedRunningInfo.leds[Peak + 2*HEIGHT] 		= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
-		LedRunningInfo.leds[Peak - 1 +4*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
+		LedRunningInfo.leds[Peak - 1] 				= CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+		LedRunningInfo.leds[Peak + 2*HEIGHT] 		= CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+		LedRunningInfo.leds[Peak - 1 +4*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 		// Other side
-	  	LedRunningInfo.leds[Peak - 1 + 5*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
-	  	LedRunningInfo.leds[Peak + 7*HEIGHT] 		= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
-	  	LedRunningInfo.leds[Peak - 1 + 9*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, 255, 200), 255, 255);
+	  	LedRunningInfo.leds[Peak - 1 + 6*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	  	LedRunningInfo.leds[Peak - 1 + 8*HEIGHT] 	= CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 	}
 	if (++DotCount >= PEAK_FALL) 
 	{                            // fall rate 
@@ -187,7 +110,93 @@ void LoveMode()
     }
 }
 
-void VuMeter(int *soundMeasure)
+void TryToReachTheTop()
+{
+	int soundLevel;
+	int height;
+	uint8_t i;
+	uint16_t minLvl;
+	uint16_t maxLvl;
+
+	soundLevel = GetSoundLevel(&minLvl, &maxLvl);
+
+	height = TOP * (soundLevel - minLvl) / (long)(maxLvl - minLvl);
+
+	if (height < 0L)
+	{
+	    height = 0;
+  	}
+  	else if (height > TOP)
+  	{
+  		height = TOP;
+  	}
+  	if (height > Peak)
+  	{
+  		Peak = height;
+  	}
+
+  	for (i=0; i<HEIGHT; i++) 
+  	{
+	    if (i >= height)   
+	    {
+	      LedRunningInfo.leds[i + 0*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 2*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 4*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 6*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 8*HEIGHT].setRGB(0, 0, 0);
+	    }
+	    else
+	    {
+	      LedRunningInfo.leds[i + 0*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 2*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 4*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 6*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 8*HEIGHT] = CHSV(map(i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	    }
+	}
+
+	for(i=HEIGHT; i>0; i--)
+	{
+	    if ((HEIGHT - i) >= height)   
+	    {
+	      LedRunningInfo.leds[i + 1*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 3*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 5*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 7*HEIGHT].setRGB(0, 0, 0);
+	      LedRunningInfo.leds[i + 9*HEIGHT].setRGB(0, 0, 0);
+	    }
+	    else
+	    {
+	      LedRunningInfo.leds[i + 1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i + 9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	    }
+	}
+
+	if ((Peak > 3) && (Peak <= HEIGHT-1))
+	{
+		// One side
+		LedRunningInfo.leds[Peak - 1] 				   = CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+		LedRunningInfo.leds[Peak + 2*HEIGHT] 		 = CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+		LedRunningInfo.leds[Peak - 1 +4*HEIGHT]  = CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+		// Other side
+	  LedRunningInfo.leds[Peak - 1 + 6*HEIGHT] = CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	  LedRunningInfo.leds[Peak - 1 + 8*HEIGHT] = CHSV(map(Peak, 0, HEIGHT-1, LED_COLOR_CSV_DARK_PINK, LED_COLOR_CSV_LIGHT_PINK), SATURATION_MAX, BRIGHTNESS_MAX);
+	}
+	if (++DotCount >= PEAK_FALL) 
+	{                            // fall rate 
+      	if(Peak > 0) 
+      	{
+      		Peak--;
+      	}
+      	DotCount = 0;
+    }
+}
+
+// TODO AP 
+void VuMeterFrequency(int *soundMeasure)
 {
   int i, j;
   int top[WIDTH_PER_FACE] = {0x00, 0x00, 0x00, 0x00, 0x00};
@@ -266,7 +275,7 @@ void VuMeter(int *soundMeasure)
 	    }
 	    else
 	    {
-	      LedRunningInfo.leds[i+2*j*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
+	      LedRunningInfo.leds[i+2*j*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 	    }
 	}
   }
@@ -286,12 +295,12 @@ void VuMeter(int *soundMeasure)
 	    }
 	    else
 	    {
-/*	      LedRunningInfo.leds[i+1*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);
-	      LedRunningInfo.leds[i+3*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);
-	      LedRunningInfo.leds[i+5*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);
-	      LedRunningInfo.leds[i+7*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);
-	      LedRunningInfo.leds[i+9*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);*/
-	      LedRunningInfo.leds[i+(2*j+1)*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,30,150), 255, 255);
+/*	      LedRunningInfo.leds[i+1*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i+3*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i+5*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i+7*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+	      LedRunningInfo.leds[i+9*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);*/
+	      LedRunningInfo.leds[i+(2*j+1)*HEIGHT] = CHSV(map(HEIGHT - i,0,HEIGHT-1,LED_COLOR_CSV_RED,LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
 	    }
 	}
   }
@@ -327,11 +336,11 @@ void VuMeterLedsTest(int value)
     }
     else
     {
-      LedRunningInfo.leds[i+0*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+2*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+4*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+6*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+8*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, 30, 150), 255, 255);
+      LedRunningInfo.leds[i+0*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+2*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+4*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+6*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+8*HEIGHT] = CHSV(map(i, 0, HEIGHT-1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
     }
   }
 
@@ -347,11 +356,11 @@ void VuMeterLedsTest(int value)
     }
     else
     {
-      LedRunningInfo.leds[i+1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
-      LedRunningInfo.leds[i+9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, 30, 150), 255, 255);
+      LedRunningInfo.leds[i+1*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+3*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+5*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+7*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
+      LedRunningInfo.leds[i+9*HEIGHT] = CHSV(map(HEIGHT - i, 0, HEIGHT - 1, LED_COLOR_CSV_RED, LED_COLOR_CSV_CYAN), SATURATION_MAX, BRIGHTNESS_MAX);
     }
   }
 }

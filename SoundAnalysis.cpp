@@ -30,7 +30,7 @@ void InitSoundAnalysis()
   // Because we power Sound Detector with 3.3 Volts
   analogReference(EXTERNAL);
 
-  SoundLevel = 12;
+  SoundLevel  = 12;
   MinLevelAvg = 0;
   MaxLevelAvg = 512;
 }
@@ -86,90 +86,14 @@ void ProcessSoundAnalysis()
   cli();  
   for (i = 0; i < FHT_SAMPLE_NUMBER; i++)
   {
-    fht_input[i] = analogRead(SOUND_SENSOR_PIN) - 512;
-  } 
+    fht_input[i] = analogRead(SOUND_SENSOR_PIN) - SOUND_SENSOR_ANALOG_OFFSET;
+  }
+  // Apply FHT 
   fht_window(); 
   fht_reorder(); 
   fht_run();
   fht_mag_log();
   sei();
-}
-
-uint8_t MaxColor(uint8_t a, uint8_t b, uint8_t c)
-{
-    if(a > b)
-    {
-        if (a > c)
-        {
-            return(a);
-        }
-        else 
-        {
-            return(c);
-        }
-    }
-    else
-    {
-        if (b > c)
-        {
-            return(b);
-        }
-        else 
-        {
-            return(c);
-        }
-    }
-}
-
-void BeatMode()
-{
-  int index;
-  int i;
-  int beat;
-  int newColor;
-
-  color++;
-  ProcessSoundAnalysis();
-  for(i = 0; i < NUM_LEDS/2; i++) 
-  {                              
-      beat = U_SUB(fht_log_out[i+4], NOISE_VALUE);        
-   
-      newColor = beat * COLOR_FACTOR + color;
-      //if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
-      if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))  
-      {    
-          LedRunningInfo.leds[i] = CHSV(newColor, 255, beat * BRIGHTNESS_FACTOR);
-          LedRunningInfo.leds[i+NUM_LEDS_PER_FACE] = CHSV(newColor, 255, beat * BRIGHTNESS_FACTOR);
-          color++;
-      }
-      LedRunningInfo.leds[i].nscale8(224);                                     
-      LedRunningInfo.leds[i+NUM_LEDS_PER_FACE].nscale8(224);                                     
-  }
-}
-
-void BeatModeWithColor()
-{
-  int index;
-  int i;
-  int beat;
-  int newColor;
-
-  ProcessSoundAnalysis();
-  for(i = 0; i < NUM_LEDS/2; i++) 
-  {                           
-      beat = U_SUB(fht_log_out[i+4], NOISE_VALUE);        
-      //beat = U_SUB(fht_log_out[2*i+2], NOISE_VALUE);        
-      newColor = MaxColor(LedRunningInfo.leds[i].r, LedRunningInfo.leds[i].g, LedRunningInfo.leds[i].b);
-      //if (beat > (LedRunningInfo.leds[i].r + LedRunningInfo.leds[i].g + LedRunningInfo.leds[i].b))
-      if (beat > 2*(newColor))
-      {    
-          LedRunningInfo.leds[i] = CHSV(color, 255, beat * BRIGHTNESS_FACTOR);
-          LedRunningInfo.leds[i+NUM_LEDS_PER_FACE] = CHSV(color, 255, beat * BRIGHTNESS_FACTOR);
-          color++;
-      }
-      LedRunningInfo.leds[i].nscale8(224);                                     
-      LedRunningInfo.leds[i+NUM_LEDS_PER_FACE].nscale8(224);                                     
-  }
 }
 
 void ProcessSoundAnalysisTable(int *soundMeasure)
@@ -178,10 +102,10 @@ void ProcessSoundAnalysisTable(int *soundMeasure)
   cli();  
   for (i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
   {
-    fht_input[i] = analogRead(0) - 512;
+    fht_input[i] = analogRead(SOUND_SENSOR_PIN) - SOUND_SENSOR_ANALOG_OFFSET;
   } 
   sei();
-    // Apply FHT
+  // Apply FHT
   fht_window(); 
   fht_reorder(); 
   fht_run();
@@ -217,25 +141,20 @@ uint16_t MeanSoundAnalysis()
 
 static void SoundAcquisition()
 {
- //  uint8_t adcLow, adcHigh;
-	// int measure;
-	// for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) 
- //  { 
- //    while(!(ADCSRA & 0x10));      // Waiting for ADC Ready
- //    ADCSRA = 0xF5;
- //    adcLow = ADCL; 
- //    adcHigh = ADCH;
- //    measure = (adcHigh << 8) | adcLow;
- //    measure -= DIFF_TO_BUILD_SIGNED_INT; 	
- //    //measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
- //    fht_input[i] = measure; 
- //  }
-  //cli();
-  for (int i = 0 ; i < FHT_SAMPLE_NUMBER ; i++)
-  {
-      fht_input[i] = analogRead(0) - 512;
-  }  
-  //sei();
+  uint8_t adcLow, adcHigh;
+	uint8_t i;
+  int measure;
+	for (i = 0 ; i < FHT_SAMPLE_NUMBER ; i++) 
+  { 
+    while(!(ADCSRA & 0x10));      // Waiting for ADC Ready
+    ADCSRA = 0xF5;
+    adcLow = ADCL; 
+    adcHigh = ADCH;
+    measure = (adcHigh << 8) | adcLow;
+    measure -= DIFF_TO_BUILD_SIGNED_INT; 	
+    measure <<= FACTOR_TO_BUILD_SIGNED_SHORT; 
+    fht_input[i] = measure; 
+  }
 }
 
 static void SoundProcessing()

@@ -24,13 +24,13 @@ typedef struct WandBWater_t
 
 void SetupWaterEffect();
 void StopWaterEffect();
-void RunWaterEffect(uint8_t music);
-void RunWaterEffectWithColor(uint8_t color, uint8_t music);
+void RunWaterEffect();
+void RunWaterEffectWithColor(uint8_t color);
 
 /**************************************************************/
 /*                        PRIVATE FUNCTIONS                   */
 /**************************************************************/
-static uint8_t defineNewSpeed(uint8_t music);
+
 static void FillNoise();
 static void MapNoiseToLed();
 static uint16_t XY( uint8_t x, uint8_t y);
